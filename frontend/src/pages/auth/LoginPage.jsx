@@ -25,7 +25,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const from = location.state?.from?.pathname || ROUTES.HOME;
+  const from = location.state?.from?.pathname || ROUTES.DASHBOARD;
 
   const validateForm = () => {
     const newErrors = {};
@@ -201,7 +201,7 @@ const LoginPage = () => {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-card px-2 text-muted-foreground">
-                  New to MERN?
+                  New to AI Clinic?
                 </span>
               </div>
             </div>

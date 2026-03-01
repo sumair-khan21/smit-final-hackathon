@@ -21,7 +21,10 @@ const useAuth = () => {
   const [logoutFn, { isLoading: isLoggingOut }] = useLogoutMutation();
 
   const isAdmin = role === "admin";
-  const isUser = role === "user";
+  const isDoctor = role === "doctor";
+  const isReceptionist = role === "receptionist";
+  const isPatient = role === "patient";
+  const isPro = user?.subscriptionPlan === "pro";
 
   return {
     // State
@@ -29,7 +32,10 @@ const useAuth = () => {
     isAuthenticated,
     role,
     isAdmin,
-    isUser,
+    isDoctor,
+    isReceptionist,
+    isPatient,
+    isPro,
 
     // Actions
     login,

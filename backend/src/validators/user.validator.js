@@ -45,10 +45,17 @@ const changePasswordSchema = z
   });
 
 const updateRoleSchema = z.object({
-  role: z.enum(["user", "admin"], {
+  role: z.enum(["admin", "doctor", "receptionist", "patient"], {
     required_error: "Role is required",
-    invalid_type_error: "Role must be 'user' or 'admin'",
+    invalid_type_error: "Role must be 'admin', 'doctor', 'receptionist', or 'patient'",
   }),
 });
 
-module.exports = { updateProfileSchema, changePasswordSchema, updateRoleSchema };
+const updateSubscriptionSchema = z.object({
+  subscriptionPlan: z.enum(["free", "pro"], {
+    required_error: "Subscription plan is required",
+    invalid_type_error: "Plan must be 'free' or 'pro'",
+  }),
+});
+
+module.exports = { updateProfileSchema, changePasswordSchema, updateRoleSchema, updateSubscriptionSchema };

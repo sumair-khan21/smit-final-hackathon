@@ -1,6 +1,27 @@
 const ROLES = Object.freeze({
-  USER: "user",
   ADMIN: "admin",
+  DOCTOR: "doctor",
+  RECEPTIONIST: "receptionist",
+  PATIENT: "patient",
+});
+
+const SUBSCRIPTION_PLANS = Object.freeze({
+  FREE: "free",
+  PRO: "pro",
+});
+
+const APPOINTMENT_STATUS = Object.freeze({
+  PENDING: "pending",
+  CONFIRMED: "confirmed",
+  COMPLETED: "completed",
+  CANCELLED: "cancelled",
+});
+
+const RISK_LEVELS = Object.freeze({
+  LOW: "low",
+  MEDIUM: "medium",
+  HIGH: "high",
+  CRITICAL: "critical",
 });
 
 const HTTP_STATUS = Object.freeze({
@@ -17,4 +38,4 @@ const HTTP_STATUS = Object.freeze({
   INTERNAL_SERVER_ERROR: 500,
 });
 
-module.exports = { ROLES, HTTP_STATUS };
+module.exports = { ROLES, SUBSCRIPTION_PLANS, APPOINTMENT_STATUS, RISK_LEVELS, HTTP_STATUS };

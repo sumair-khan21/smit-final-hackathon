@@ -153,6 +153,21 @@ const deactivateUser = asyncHandler(async (req, res) => {
 });
 
 // ─────────────────────────────────────────
+// @desc    Update subscription plan
+// @route   PATCH /api/v1/users/:id/subscription
+// @access  Admin only
+// ─────────────────────────────────────────
+const updateSubscription = asyncHandler(async (req, res) => {
+  const user = await userService.updateSubscription(req.params.id, req.body.subscriptionPlan);
+
+  res
+    .status(HTTP_STATUS.OK)
+    .json(
+      new ApiResponse(HTTP_STATUS.OK, { user }, "Subscription updated successfully")
+    );
+});
+
+// ─────────────────────────────────────────
 // @desc    Delete user permanently
 // @route   DELETE /api/v1/users/:id
 // @access  Admin only
@@ -182,6 +197,7 @@ module.exports = {
   removeAvatar,
   changePassword,
   updateUserRole,
+  updateSubscription,
   deactivateUser,
   deleteUser,
 };

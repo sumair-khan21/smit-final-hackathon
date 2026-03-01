@@ -24,7 +24,7 @@ class AuthService {
   /**
    * Register new user
    */
-  async register({ name, email, password }) {
+  async register({ name, email, password, phone, role, specialization }) {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       throw new ApiError(
@@ -33,7 +33,7 @@ class AuthService {
       );
     }
 
-    const user = await User.create({ name, email, password });
+    const user = await User.create({ name, email, password, phone, role, specialization });
     const { accessToken, refreshToken } = await this.generateTokens(user._id);
     const userData = user.toJSON();
 

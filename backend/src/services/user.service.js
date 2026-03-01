@@ -190,6 +190,23 @@ class UserService {
   }
 
   /**
+   * Update subscription plan (Admin only)
+   */
+  async updateSubscription(userId, subscriptionPlan) {
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { subscriptionPlan },
+      { new: true, runValidators: true }
+    );
+
+    if (!user) {
+      throw new ApiError(HTTP_STATUS.NOT_FOUND, "User not found");
+    }
+
+    return user;
+  }
+
+  /**
    * Hard delete user (Admin only)
    */
   async deleteUser(userId) {

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const env = require("../config/env.config");
-const { ROLES } = require("../constants");
+const { ROLES, SUBSCRIPTION_PLANS } = require("../constants");
 
 const userSchema = new mongoose.Schema(
   {
@@ -34,7 +34,20 @@ const userSchema = new mongoose.Schema(
         values: Object.values(ROLES),
         message: "{VALUE} is not a valid role",
       },
-      default: ROLES.USER,
+      default: ROLES.PATIENT,
+    },
+    phone: {
+      type: String,
+      trim: true,
+    },
+    specialization: {
+      type: String,
+      trim: true,
+    },
+    subscriptionPlan: {
+      type: String,
+      enum: Object.values(SUBSCRIPTION_PLANS),
+      default: SUBSCRIPTION_PLANS.FREE,
     },
     avatar: {
       public_id: { type: String, default: "" },

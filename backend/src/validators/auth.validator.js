@@ -21,6 +21,16 @@ const registerSchema = z.object({
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]/,
       "Password must contain uppercase, lowercase, number, and special character (@$!%*?&#)"
     ),
+
+  phone: z.string().trim().optional(),
+
+  role: z
+    .enum(["admin", "doctor", "receptionist", "patient"], {
+      invalid_type_error: "Invalid role",
+    })
+    .optional(),
+
+  specialization: z.string().trim().optional(),
 });
 
 const loginSchema = z.object({

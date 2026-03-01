@@ -7,6 +7,7 @@ const {
   removeAvatar,
   changePassword,
   updateUserRole,
+  updateSubscription,
   deactivateUser,
   deleteUser,
 } = require("../controllers/user.controller");
@@ -20,6 +21,7 @@ const {
   updateProfileSchema,
   changePasswordSchema,
   updateRoleSchema,
+  updateSubscriptionSchema,
 } = require("../validators/user.validator");
 const upload = require("../config/multer.config");
 const { ROLES } = require("../constants");
@@ -30,7 +32,7 @@ const router = Router();
 router.use(authenticate);
 
 // ── Admin Only Routes ──
-router.get("/", authorize(ROLES.ADMIN), getAllUsers);
+router.get("/", authorize(ROLES.ADMIN, ROLES.RECEPTIONIST), getAllUsers);
 router.patch(
   "/:id/role",
   authorize(ROLES.ADMIN),
@@ -61,5 +63,11 @@ router.patch(
   changePassword
 );
 router.patch("/:id/deactivate", authorizeOwner, deactivateUser);
+router.patch(
+  "/:id/subscription",
+  authorize(ROLES.ADMIN),
+  validate(updateSubscriptionSchema),
+  updateSubscription
+);
 
 module.exports = router;
