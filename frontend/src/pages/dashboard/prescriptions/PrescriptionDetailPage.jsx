@@ -54,7 +54,7 @@ const PrescriptionDetailPage = () => {
           <div className="grid grid-cols-2 gap-6">
             <div>
               <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Doctor</p>
-              <p className="font-semibold">Dr. {prescription.doctorId?.name}</p>
+              <p className="font-semibold">{prescription.doctorId?.name}</p>
               <p className="text-sm text-muted-foreground">{prescription.doctorId?.specialization}</p>
             </div>
             <div>

@@ -6,10 +6,12 @@ import { ROUTES } from "@/utils/constants";
 
 const PublicRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  const { isLoading, isError } = useGetMeQuery();
 
-  // If checking auth and not errored yet, show loading
-  if (isLoading && !isError) {
+  // Only check session when we have a token but no user state yet
+  const hasToken = !!localStorage.getItem("access_token");
+  const { isLoading } = useGetMeQuery(undefined, { skip: isAuthenticated || !hasToken });
+
+  if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
         <LoadingSpinner size="lg" />
@@ -17,9 +19,9 @@ const PublicRoute = ({ children }) => {
     );
   }
 
-  // If already logged in, redirect to home
+  // If already logged in, redirect to dashboard
   if (isAuthenticated) {
-    return <Navigate to={ROUTES.HOME} replace />;
+    return <Navigate to={ROUTES.DASHBOARD} replace />;
   }
 
   return children;

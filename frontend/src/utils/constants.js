@@ -26,8 +26,10 @@ export const ROUTES = Object.freeze({
   AI_SYMPTOM_CHECKER: "/dashboard/ai/symptom-checker",
   AI_PRESCRIPTION_EXPLAIN: "/dashboard/ai/prescription-explain",
   AI_RISK_FLAGGING: "/dashboard/ai/risk-flagging",
+  AI_DIAGNOSIS_LOGS: "/dashboard/ai/diagnosis-logs",
   SCHEDULE: "/dashboard/appointments/schedule",
   ANALYTICS: "/dashboard/analytics",
   SUBSCRIPTION: "/dashboard/subscription",
   STAFF: "/dashboard/staff",
+  SYSTEM: "/dashboard/system",
 });

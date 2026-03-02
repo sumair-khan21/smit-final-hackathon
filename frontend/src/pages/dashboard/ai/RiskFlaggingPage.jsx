@@ -37,8 +37,12 @@ export default function RiskFlaggingPage() {
 
   const handleAnalyze = async () => {
     if (!patientId) return;
-    const res = await runRisk(patientId).unwrap().catch(() => null);
-    if (res?.data) setResult(res.data);
+    try {
+      const res = await runRisk({ patientId }).unwrap();
+      setResult(res?.data ?? res);
+    } catch (err) {
+      setResult({ aiFailed: true, error: err?.data?.message || "Request failed" });
+    }
   };
 
   return (

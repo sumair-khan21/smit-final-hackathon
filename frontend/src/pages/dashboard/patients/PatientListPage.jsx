@@ -15,7 +15,7 @@ const PatientListPage = () => {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [deleteId, setDeleteId] = useState(null);
-  const { isAdmin } = useAuth();
+  const { isAdmin, isReceptionist } = useAuth();
   const navigate = useNavigate();
 
   const { data, isLoading } = useGetPatientsQuery({ search, page, limit: 10 });
@@ -38,12 +38,14 @@ const PatientListPage = () => {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Patients</h1>
-        <Button asChild size="sm">
-          <Link to={ROUTES.PATIENTS + "/add"}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Patient
-          </Link>
-        </Button>
+        {(isAdmin || isReceptionist) && (
+          <Button asChild size="sm">
+            <Link to={ROUTES.PATIENTS + "/add"}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Patient
+            </Link>
+          </Button>
+        )}
       </div>
 
       {/* Search */}
@@ -103,9 +105,11 @@ const PatientListPage = () => {
                               <Eye className="h-4 w-4" />
                             </Link>
                           </Button>
-                          <Button variant="ghost" size="icon" onClick={() => navigate(`${ROUTES.PATIENTS}/${patient._id}`)}>
-                            <Pencil className="h-4 w-4" />
-                          </Button>
+                          {(isAdmin || isReceptionist) && (
+                            <Button variant="ghost" size="icon" onClick={() => navigate(`${ROUTES.PATIENTS}/${patient._id}`)}>
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                          )}
                           {isAdmin && (
                             <Button variant="ghost" size="icon" className="text-destructive hover:text-destructive" onClick={() => setDeleteId(patient._id)}>
                               <Trash2 className="h-4 w-4" />

@@ -15,7 +15,7 @@ const AppointmentListPage = () => {
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState("");
   const [cancelId, setCancelId] = useState(null);
-  const { isAdmin, isReceptionist, isDoctor } = useAuth();
+  const { isAdmin, isReceptionist, isDoctor, isPatient } = useAuth();
 
   const { data, isLoading } = useGetAppointmentsQuery({ page, limit: 10, status: statusFilter });
   const [updateStatus] = useUpdateAppointmentStatusMutation();
@@ -126,6 +126,12 @@ const AppointmentListPage = () => {
                             </Button>
                           )}
                           {(isAdmin || isReceptionist) && apt.status !== "cancelled" && apt.status !== "completed" && (
+                            <Button variant="ghost" size="xs" className="text-xs h-7 px-2 text-destructive hover:text-destructive"
+                              onClick={() => setCancelId(apt._id)}>
+                              Cancel
+                            </Button>
+                          )}
+                          {isPatient && apt.status === "pending" && (
                             <Button variant="ghost" size="xs" className="text-xs h-7 px-2 text-destructive hover:text-destructive"
                               onClick={() => setCancelId(apt._id)}>
                               Cancel

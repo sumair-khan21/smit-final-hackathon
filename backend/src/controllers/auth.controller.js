@@ -41,7 +41,7 @@ const register = asyncHandler(async (req, res) => {
   res
     .status(HTTP_STATUS.CREATED)
     .json(
-      new ApiResponse(HTTP_STATUS.CREATED, { user }, "User registered successfully")
+      new ApiResponse(HTTP_STATUS.CREATED, { user, accessToken, refreshToken }, "User registered successfully")
     );
 });
 
@@ -55,9 +55,10 @@ const login = asyncHandler(async (req, res) => {
 
   setTokenCookies(res, accessToken, refreshToken);
 
+  // Also return tokens in body for cross-origin deployments (frontend stores in localStorage)
   res
     .status(HTTP_STATUS.OK)
-    .json(new ApiResponse(HTTP_STATUS.OK, { user }, "Logged in successfully"));
+    .json(new ApiResponse(HTTP_STATUS.OK, { user, accessToken, refreshToken }, "Logged in successfully"));
 });
 
 // ─────────────────────────────────────────
@@ -80,15 +81,15 @@ const logout = asyncHandler(async (req, res) => {
 // @access  Public (needs refresh cookie)
 // ─────────────────────────────────────────
 const refreshAccessToken = asyncHandler(async (req, res) => {
-  const { accessToken, refreshToken } = await authService.refreshToken(
-    req.cookies?.refreshToken
-  );
+  // Accept refresh token from cookie OR request body (for cross-origin clients)
+  const incomingRefreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
+  const { accessToken, refreshToken } = await authService.refreshToken(incomingRefreshToken);
 
   setTokenCookies(res, accessToken, refreshToken);
 
   res
     .status(HTTP_STATUS.OK)
-    .json(new ApiResponse(HTTP_STATUS.OK, null, "Token refreshed successfully"));
+    .json(new ApiResponse(HTTP_STATUS.OK, { accessToken, refreshToken }, "Token refreshed successfully"));
 });
 
 // ─────────────────────────────────────────

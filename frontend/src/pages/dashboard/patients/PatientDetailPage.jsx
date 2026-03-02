@@ -35,13 +35,13 @@ const TimelineItem = ({ item }) => {
           <div>
             <p className="text-sm font-medium capitalize">{item.type}</p>
             {item.type === "appointment" && (
-              <p className="text-xs text-muted-foreground">Dr. {item.doctorId?.name} • {item.timeSlot} • <StatusBadge status={item.status} /></p>
+              <p className="text-xs text-muted-foreground">{item.doctorId?.name} • {item.timeSlot} • <StatusBadge status={item.status} /></p>
             )}
             {item.type === "prescription" && (
-              <p className="text-xs text-muted-foreground">By Dr. {item.doctorId?.name} • {item.diagnosis}</p>
+              <p className="text-xs text-muted-foreground">By {item.doctorId?.name} • {item.diagnosis}</p>
             )}
             {item.type === "diagnosis" && (
-              <p className="text-xs text-muted-foreground">By Dr. {item.doctorId?.name} • <StatusBadge status={item.riskLevel} /></p>
+              <p className="text-xs text-muted-foreground">By {item.doctorId?.name} • <StatusBadge status={item.riskLevel} /></p>
             )}
           </div>
           <p className="text-xs text-muted-foreground flex-shrink-0">{new Date(item.date).toLocaleDateString()}</p>

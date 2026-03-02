@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useGetDoctorAnalyticsQuery } from "@/features/analytics/analyticsApi";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, Legend,
+  PieChart, Pie, Cell,
 } from "recharts";
 import {
   Users, UserCheck, CalendarDays, Clock, CheckCircle2,
@@ -59,28 +59,42 @@ function AdminView({ data }) {
         <div className="bg-white rounded-xl border border-slate-200 p-5">
           <h3 className="font-semibold text-slate-700 mb-4">Top Diagnoses</h3>
           {data.topDiagnoses?.length > 0 ? (
-            <ResponsiveContainer width="100%" height={220}>
-              <PieChart>
-                <Pie
-                  data={data.topDiagnoses}
-                  dataKey="count"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={80}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                  labelLine={false}
-                >
-                  {data.topDiagnoses.map((_, i) => (
-                    <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
-                <Legend wrapperStyle={{ fontSize: 11 }} />
-              </PieChart>
-            </ResponsiveContainer>
+            <>
+              <ResponsiveContainer width="100%" height={200}>
+                <PieChart>
+                  <Pie
+                    data={data.topDiagnoses}
+                    dataKey="count"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={50}
+                    outerRadius={80}
+                    paddingAngle={3}
+                  >
+                    {data.topDiagnoses.map((_, i) => (
+                      <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{ fontSize: 12, borderRadius: 8, border: "1px solid #e2e8f0" }}
+                    formatter={(value, name) => [value, name]}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+              {/* Legend below chart */}
+              <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
+                {data.topDiagnoses.map((item, i) => (
+                  <div key={i} className="flex items-center gap-1.5 text-xs text-slate-600">
+                    <span className="inline-block w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
+                    <span className="truncate max-w-35" title={item.name}>{item.name}</span>
+                    <span className="text-slate-400 font-medium">{item.count}</span>
+                  </div>
+                ))}
+              </div>
+            </>
           ) : (
-            <div className="h-[220px] flex items-center justify-center text-slate-400 text-sm">
+            <div className="h-55 flex items-center justify-center text-slate-400 text-sm">
               No diagnosis data yet
             </div>
           )}

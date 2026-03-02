@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, FileText, Eye } from "lucide-react";
+import { Plus, FileText, Eye, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import EmptyState from "@/components/shared/EmptyState";
 import useAuth from "@/hooks/useAuth";
 import { useGetPrescriptionsQuery } from "@/features/prescriptions/prescriptionApi";
+import { generatePrescriptionPDF } from "@/utils/generatePrescriptionPDF";
 import { ROUTES } from "@/utils/constants";
 
 const PrescriptionListPage = () => {
   const [page, setPage] = useState(1);
-  const { isDoctor } = useAuth();
+  const { isDoctor, isPatient } = useAuth();
 
   const { data, isLoading } = useGetPrescriptionsQuery({ page, limit: 10 });
   const prescriptions = data?.data?.prescriptions || [];
@@ -63,11 +64,23 @@ const PrescriptionListPage = () => {
                       <td className="px-4 py-3">{rx.medicines?.length || 0} medicine(s)</td>
                       <td className="px-4 py-3 text-muted-foreground">{new Date(rx.createdAt).toLocaleDateString()}</td>
                       <td className="px-4 py-3 text-right">
-                        <Button variant="ghost" size="icon" asChild>
-                          <Link to={`${ROUTES.PRESCRIPTIONS}/${rx._id}`}>
-                            <Eye className="h-4 w-4" />
-                          </Link>
-                        </Button>
+                        <div className="flex items-center justify-end gap-1">
+                          <Button variant="ghost" size="icon" asChild>
+                            <Link to={`${ROUTES.PRESCRIPTIONS}/${rx._id}`}>
+                              <Eye className="h-4 w-4" />
+                            </Link>
+                          </Button>
+                          {isPatient && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => generatePrescriptionPDF(rx, rx.patientId, rx.doctorId)}
+                              title="Download PDF"
+                            >
+                              <Download className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}

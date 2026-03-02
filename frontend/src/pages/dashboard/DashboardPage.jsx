@@ -132,7 +132,7 @@ const DashboardPage = () => {
                   <div>
                     <p className="text-sm font-medium">{apt.patientId?.name || "Unknown Patient"}</p>
                     <p className="text-xs text-muted-foreground">
-                      Dr. {apt.doctorId?.name} • {apt.timeSlot}
+                      {apt.doctorId?.name} • {apt.timeSlot}
                     </p>
                   </div>
                   <div className="text-right">

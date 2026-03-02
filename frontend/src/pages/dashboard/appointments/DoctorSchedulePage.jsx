@@ -10,13 +10,15 @@ import { useGetDoctorScheduleQuery } from "@/features/appointments/appointmentAp
 import { useGetUsersQuery } from "@/features/users/userApi";
 
 const DoctorSchedulePage = () => {
-  const { user, isDoctor, isReceptionist } = useAuth();
+  const { user, isDoctor, isAdmin, isReceptionist } = useAuth();
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [selectedDoctorId, setSelectedDoctorId] = useState("");
 
-  // Receptionists pick a doctor; doctors see their own
-  const { data: usersData } = useGetUsersQuery({}, { skip: !isReceptionist });
-  const doctors = (usersData?.data?.users || []).filter((u) => u.role === "doctor");
+  const canPickDoctor = isAdmin || isReceptionist;
+
+  // Admin/Receptionists pick a doctor; doctors see their own
+  const { data: usersData } = useGetUsersQuery({ role: "doctor", limit: 100 }, { skip: !canPickDoctor });
+  const doctors = usersData?.data?.users || [];
 
   const doctorId = isDoctor ? user?._id : selectedDoctorId;
 
@@ -46,8 +48,8 @@ const DoctorSchedulePage = () => {
 
       {/* Filters */}
       <div className="flex flex-wrap gap-4">
-        {/* Doctor picker — receptionist only */}
-        {isReceptionist && (
+        {/* Doctor picker — admin & receptionist */}
+        {canPickDoctor && (
           <div className="flex-1 min-w-[200px]">
             <Label className="text-sm font-medium text-slate-700 mb-1 block">Select Doctor</Label>
             <div className="relative">
@@ -85,8 +87,8 @@ const DoctorSchedulePage = () => {
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center justify-between">
             <span>
-              {isReceptionist && selectedDoctor
-                ? `Dr. ${selectedDoctor.name}'s Schedule`
+              {canPickDoctor && selectedDoctor
+                ? `${selectedDoctor.name}'s Schedule`
                 : isDoctor
                 ? "My Schedule"
                 : "Schedule"}
@@ -99,8 +101,8 @@ const DoctorSchedulePage = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {/* Receptionist: no doctor selected yet */}
-          {isReceptionist && !selectedDoctorId ? (
+          {/* Admin/Receptionist: no doctor selected yet */}
+          {canPickDoctor && !selectedDoctorId ? (
             <EmptyState
               title="Select a doctor"
               description="Choose a doctor above to view their daily schedule"

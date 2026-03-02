@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_BASE_URL } from "@/utils/constants";
 import { logout } from "@/features/auth/authSlice";
 
-// ── Base query with credentials (cookies) ──
+// ── Base query — sends Bearer token from localStorage + cookies as fallback ──
 const baseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
   credentials: "include",
@@ -10,6 +10,11 @@ const baseQuery = fetchBaseQuery({
     // Don't set Content-Type for file uploads
     if (endpoint !== "updateAvatar") {
       headers.set("Content-Type", "application/json");
+    }
+    // Attach access token from localStorage (works cross-origin on live deployments)
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
     }
     return headers;
   },
@@ -35,13 +40,22 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
     );
 
     if (!shouldSkip) {
+      const refreshToken = localStorage.getItem("refresh_token");
+
       const refreshResult = await baseQuery(
-        { url: "/auth/refresh-token", method: "POST" },
+        { url: "/auth/refresh-token", method: "POST", body: { refreshToken } },
         api,
         extraOptions
       );
 
       if (refreshResult?.data?.success) {
+        // Store the new tokens from response body
+        const newAccess = refreshResult.data?.data?.accessToken;
+        const newRefresh = refreshResult.data?.data?.refreshToken;
+        if (newAccess) localStorage.setItem("access_token", newAccess);
+        if (newRefresh) localStorage.setItem("refresh_token", newRefresh);
+
+        // Retry original request with new token
         result = await baseQuery(args, api, extraOptions);
       } else {
         api.dispatch(logout());

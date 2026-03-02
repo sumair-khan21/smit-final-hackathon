@@ -1,4 +1,5 @@
 const Appointment = require("../models/appointment.model");
+const Patient = require("../models/patient.model");
 const ApiError = require("../utils/ApiError");
 const { HTTP_STATUS, ROLES, APPOINTMENT_STATUS } = require("../constants");
 
@@ -35,9 +36,14 @@ class AppointmentService {
     if (userRole === ROLES.DOCTOR) {
       filter.doctorId = userId;
     } else if (userRole === ROLES.PATIENT) {
-      // patient sees their own via patientId linked to userId - handled differently
-      // For now, patients see nothing here (they use patient detail page)
-      filter._id = null;
+      const patientRecord = await Patient.findOne({ userId }).select("_id");
+      if (!patientRecord) {
+        return {
+          appointments: [],
+          pagination: { total: 0, page: parseInt(page), limit: parseInt(limit), totalPages: 0 },
+        };
+      }
+      filter.patientId = patientRecord._id;
     }
 
     if (status) filter.status = status;

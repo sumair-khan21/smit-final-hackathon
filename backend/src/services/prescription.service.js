@@ -1,4 +1,5 @@
 const Prescription = require("../models/prescription.model");
+const Patient = require("../models/patient.model");
 const ApiError = require("../utils/ApiError");
 const { HTTP_STATUS, ROLES } = require("../constants");
 
@@ -24,10 +25,12 @@ class PrescriptionService {
     const { page = 1, limit = 10, sort = "-createdAt" } = query;
     const filter = {};
 
-    if (userRole === ROLES.DOCTOR) filter.doctorId = userId;
-    else if (userRole === ROLES.PATIENT) {
-      // patients see their own via patientId linked — handled by patient detail
-      filter._id = null;
+    if (userRole === ROLES.DOCTOR) {
+      filter.doctorId = userId;
+    } else if (userRole === ROLES.PATIENT) {
+      const patientRecord = await Patient.findOne({ userId }).select("_id");
+      if (!patientRecord) return { prescriptions: [], pagination: { total: 0, page: 1, limit: parseInt(limit), totalPages: 0 } };
+      filter.patientId = patientRecord._id;
     }
 
     const skip = (parseInt(page) - 1) * parseInt(limit);

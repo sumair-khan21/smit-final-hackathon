@@ -23,6 +23,6 @@ router.get("/doctor/:doctorId/schedule", getDoctorSchedule);
 router.get("/:id", getAppointmentById);
 router.patch("/:id", authorize(ROLES.ADMIN, ROLES.RECEPTIONIST), validate(updateAppointmentSchema), updateAppointment);
 router.patch("/:id/status", authorize(ROLES.ADMIN, ROLES.DOCTOR, ROLES.RECEPTIONIST), validate(updateStatusSchema), updateStatus);
-router.delete("/:id", authorize(ROLES.ADMIN, ROLES.RECEPTIONIST), cancelAppointment);
+router.delete("/:id", authorize(ROLES.ADMIN, ROLES.RECEPTIONIST, ROLES.PATIENT), cancelAppointment);
 
 module.exports = router;

@@ -14,6 +14,8 @@ import {
   ClipboardList,
   UserCog,
   CalendarDays,
+  Settings2,
+  ShieldAlert,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import useAuth from "@/hooks/useAuth";
@@ -28,7 +30,7 @@ const navConfig = {
     { label: "Prescriptions", path: ROUTES.PRESCRIPTIONS, icon: FileText },
     { label: "Staff", path: ROUTES.STAFF, icon: UserCog },
     { label: "Analytics", path: ROUTES.ANALYTICS, icon: BarChart3 },
-    { label: "Subscription", path: ROUTES.SUBSCRIPTION, icon: CreditCard },
+    { label: "System", path: ROUTES.SYSTEM, icon: Settings2 },
   ],
   [ROLES.DOCTOR]: [
     { label: "Dashboard", path: ROUTES.DASHBOARD, icon: LayoutDashboard },
@@ -37,7 +39,8 @@ const navConfig = {
     { label: "Prescriptions", path: ROUTES.PRESCRIPTIONS, icon: FileText },
     { label: "Symptom Checker", path: ROUTES.AI_SYMPTOM_CHECKER, icon: Brain },
     { label: "AI Explain Rx", path: ROUTES.AI_PRESCRIPTION_EXPLAIN, icon: Stethoscope },
-    
+    { label: "AI Risk Flagging", path: ROUTES.AI_RISK_FLAGGING, icon: ShieldAlert },
+    { label: "Diagnosis History", path: ROUTES.AI_DIAGNOSIS_LOGS, icon: ClipboardList },
     { label: "My Analytics", path: ROUTES.ANALYTICS, icon: BarChart3 },
   ],
   [ROLES.RECEPTIONIST]: [
@@ -50,6 +53,8 @@ const navConfig = {
     { label: "Dashboard", path: ROUTES.DASHBOARD, icon: LayoutDashboard },
     { label: "My Appointments", path: ROUTES.APPOINTMENTS, icon: Calendar },
     { label: "My Prescriptions", path: ROUTES.PRESCRIPTIONS, icon: FileText },
+    { label: "Symptom Checker", path: ROUTES.AI_SYMPTOM_CHECKER, icon: Brain },
+    { label: "AI Explain Rx", path: ROUTES.AI_PRESCRIPTION_EXPLAIN, icon: Stethoscope },
   ],
 };
 

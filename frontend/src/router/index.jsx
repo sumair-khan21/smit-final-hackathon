@@ -38,12 +38,14 @@ const PrescriptionDetailPage = lazy(() => import("@/pages/dashboard/prescription
 const SymptomCheckerPage = lazy(() => import("@/pages/dashboard/ai/SymptomCheckerPage"));
 const PrescriptionExplainPage = lazy(() => import("@/pages/dashboard/ai/PrescriptionExplainPage"));
 const RiskFlaggingPage = lazy(() => import("@/pages/dashboard/ai/RiskFlaggingPage"));
+const DiagnosisLogsPage = lazy(() => import("@/pages/dashboard/ai/DiagnosisLogsPage"));
 
 const AdminAnalyticsPage = lazy(() => import("@/pages/dashboard/analytics/AdminAnalyticsPage"));
 const DoctorAnalyticsPage = lazy(() => import("@/pages/dashboard/analytics/DoctorAnalyticsPage"));
 
 const SubscriptionPage = lazy(() => import("@/pages/dashboard/SubscriptionPage"));
 const StaffManagementPage = lazy(() => import("@/pages/dashboard/staff/StaffManagementPage"));
+const SystemManagementPage = lazy(() => import("@/pages/dashboard/admin/SystemManagementPage"));
 
 const PageLoader = () => (
   <div className="flex h-full items-center justify-center py-20">
@@ -185,11 +187,11 @@ const router = createBrowserRouter([
         ),
       },
 
-      // AI Tools (Doctor only)
+      // AI Tools
       {
         path: "ai/symptom-checker",
         element: (
-          <ProtectedRoute allowedRoles={["doctor"]}>
+          <ProtectedRoute allowedRoles={["doctor", "patient"]}>
             <Suspense fallback={<PageLoader />}>
               <SymptomCheckerPage />
             </Suspense>
@@ -212,6 +214,16 @@ const router = createBrowserRouter([
           <ProtectedRoute allowedRoles={["doctor"]}>
             <Suspense fallback={<PageLoader />}>
               <RiskFlaggingPage />
+            </Suspense>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "ai/diagnosis-logs",
+        element: (
+          <ProtectedRoute allowedRoles={["doctor", "admin"]}>
+            <Suspense fallback={<PageLoader />}>
+              <DiagnosisLogsPage />
             </Suspense>
           </ProtectedRoute>
         ),
@@ -249,6 +261,18 @@ const router = createBrowserRouter([
           <ProtectedRoute allowedRoles={["admin"]}>
             <Suspense fallback={<PageLoader />}>
               <StaffManagementPage />
+            </Suspense>
+          </ProtectedRoute>
+        ),
+      },
+
+      // System Management — subscriptions + usage (Admin)
+      {
+        path: "system",
+        element: (
+          <ProtectedRoute allowedRoles={["admin"]}>
+            <Suspense fallback={<PageLoader />}>
+              <SystemManagementPage />
             </Suspense>
           </ProtectedRoute>
         ),

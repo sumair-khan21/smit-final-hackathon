@@ -13,7 +13,8 @@ const authApi = api.injectEndpoints({
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(setCredentials(data.data.user));
+          // Pass full data so setCredentials can extract user + tokens
+          dispatch(setCredentials(data.data));
         } catch {
           // handled by component
         }
@@ -30,7 +31,8 @@ const authApi = api.injectEndpoints({
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(setCredentials(data.data.user));
+          // Pass full data so setCredentials can extract user + tokens
+          dispatch(setCredentials(data.data));
         } catch {
           // handled by component
         }
@@ -60,7 +62,7 @@ const authApi = api.injectEndpoints({
       async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
-          dispatch(setCredentials(data.data.user));
+          dispatch(setCredentials({ user: data.data.user }));
         } catch {
           // not logged in — this is expected, do nothing
         }
